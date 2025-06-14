@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aura - A beautiful and functional task management app with focus sessions, goal tracking, and daily task planning">
+    <meta name="keywords" content="task management, productivity, focus sessions, goals, todo, daily tasks, time tracking">
+    <meta name="author" content="Aura Task Management">
+    <meta name="theme-color" content="#6B8F71">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Aura - Beautiful Task Management">
+    <meta property="og:description" content="A beautiful and functional task management app with focus sessions, goal tracking, and daily task planning">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="./screenshots/aura-main.png">
+    <title>Aura - Beautiful Task Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="nav-logo">
+                    <svg width="97" height="25.5" viewBox="0 0 194 51" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="aura-logo-title">
+                        <title id="aura-logo-title">Aura logo</title>
+                        <g fill="currentColor">
+                            <!-- Cone Symbol -->
+                            <path fill-rule="evenodd" d="M25.3,5.3 L9.1,34.5 C9.1,39.2 16.4,43 25.3,43 C34.2,43 41.5,39.2 41.5,34.5 L25.3,5.3 Z M14.3,34.5 C14.3,36.7 19.2,38.5 25.3,38.5 C31.4,38.5 36.3,36.7 36.3,34.5 C36.3,32.3 31.4,30.5 25.3,30.5 C19.2,30.5 14.3,32.3 14.3,34.5 Z"></path>
+                            <!-- Text: Aura -->
+                            <text x="62" y="37" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="38" font-weight="bold">
+                                Aura
+                            </text>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-page="home">Home</a>
+                <a href="#" class="nav-link" data-page="tasks">My Tasks</a>
+                <a href="#" class="nav-link" data-page="daily">Daily Tasks</a>
+                <a href="#" class="nav-link" data-page="focus">Focus Sessions</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <div class="container">
+                <!-- Header Section -->
+                <header class="page-header">
+                    <h1 class="page-title">Overview</h1>
+                    <p class="page-subtitle">Track your progress and stay motivated</p>
+                </header>
+
+                <!-- Stats Cards -->
+                <section class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3 class="stat-title">Tasks Completed</h3>
+                            <div class="stat-value" id="completedTasks">0</div>
+                            <div class="stat-change" id="completedTasksChange">--</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3 class="stat-title">Tasks Pending</h3>
+                            <div class="stat-value" id="pendingTasks">0</div>
+                            <div class="stat-change" id="pendingTasksChange">--</div>
+                        </div>
+
+                        <div class="stat-card">
+                            <h3 class="stat-title">Overall Progress</h3>
+                            <div class="stat-value" id="progressPercentage">0%</div>
+                            <div class="stat-change" id="progressChange">--</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Charts Section -->
+                <section class="charts-section">
+                    <div class="charts-grid">
+                        <!-- Tasks Completed Over Time -->
+                        <div class="chart-card">
+                            <h3 class="chart-title">Tasks Completed Over Time</h3>
+                            <div class="chart-metric">
+                                <span class="metric-value" id="completionGrowth">Loading...</span>
+                                <div class="metric-detail">
+                                    <span class="metric-period">This Month vs Last Month</span>
+                                    <span class="metric-change" id="completionGrowthPercent">--</span>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="completedChart" class="chart-canvas"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Progress by Category -->
+                        <div class="chart-card">
+                            <h3 class="chart-title">Progress by Category</h3>
+                            <div class="chart-metric">
+                                <span class="metric-value" id="categoryProgress">Loading...</span>
+                                <div class="metric-detail">
+                                    <span class="metric-period">Overall Completion Rate</span>
+                                    <span class="metric-change" id="overallProgress">--</span>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="categoryChart" class="chart-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quote Section -->
+                <section class="quote-section">
+                    <div class="quote-text">
+                        "The key is not to prioritize what's on your schedule, but to schedule your priorities." - Stephen Covey
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- My Tasks Page -->
+        <div id="tasks-page" class="page">
+            <div class="tasks-layout">
+                <!-- Sidebar -->
+                <div class="tasks-sidebar">
+                    <div class="sidebar-header">
+                        <h2>My Tasks</h2>
+                    </div>
+
+                    <div class="sidebar-menu">
+                        <div class="menu-item active">
+                            <i class="fas fa-inbox"></i>
+                            <span>Inbox</span>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!-- Main Content -->
+                <div class="tasks-main">
+
+                    <div class="tasks-header">
+                        <div class="tasks-header-right">
+                            <button class="new-task-btn">New Task</button>
+                        </div>
+                    </div>
+
+                    <div class="tasks-content">
+                        <h2 class="section-title">Inbox</h2>
+
+                        <div class="task-list" id="taskList">
+                            <!-- Tasks will be dynamically loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Tasks Page -->
+        <div id="daily-page" class="page">
+            <div class="daily-layout">
+                <!-- Daily Header -->
+                <div class="daily-header">
+                    <div class="daily-header-content">
+                        <div class="daily-title-section">
+                            <h1 class="daily-title">Daily Tasks</h1>
+                            <p class="daily-date" id="currentDate"></p>
+                        </div>
+                        <div class="daily-actions">
+                            <button class="add-daily-task-btn">Add Daily Task</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Daily Tasks Content -->
+                <div class="daily-content">
+                    <div class="daily-tasks-section">
+                        <h2 class="section-title">Today's Tasks</h2>
+                        <div class="daily-task-list" id="dailyTaskList">
+                            <!-- Daily tasks will be dynamically loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Focus Sessions Page -->
+        <div id="focus-page" class="page">
+            <div class="focus-layout">
+                <!-- Focus Header -->
+                <div class="focus-header">
+                    <div class="focus-header-content">
+                        <div class="focus-title-section">
+                            <h1 class="focus-title">Focus Sessions</h1>
+                            <p class="focus-subtitle">Stay focused and track your productivity</p>
+                        </div>
+                        <div class="focus-actions">
+                            <button class="set-goal-btn">Set Goal</button>
+                            <button class="start-focus-btn">Start Focus</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Focus Stats -->
+                <div class="focus-stats">
+                    <div class="focus-stats-grid">
+                        <div class="focus-stat-card">
+                            <div class="focus-stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="focus-stat-content">
+                                <div class="focus-stat-value" id="totalFocusTime">0h 0m</div>
+                                <div class="focus-stat-label">Total Focus Time</div>
+                            </div>
+                        </div>
+                        <div class="focus-stat-card">
+                            <div class="focus-stat-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="focus-stat-content">
+                                <div class="focus-stat-value" id="currentStreak">0</div>
+                                <div class="focus-stat-label">Current Streak</div>
+                            </div>
+                        </div>
+                        <div class="focus-stat-card">
+                            <div class="focus-stat-icon">
+                                <i class="fas fa-target"></i>
+                            </div>
+                            <div class="focus-stat-content">
+                                <div class="focus-stat-value" id="goalProgress">0%</div>
+                                <div class="focus-stat-label">Goal Progress</div>
+                            </div>
+                        </div>
+                        <div class="focus-stat-card">
+                            <div class="focus-stat-icon">
+                                <i class="fas fa-calendar-day"></i>
+                            </div>
+                            <div class="focus-stat-content">
+                                <div class="focus-stat-value" id="todayFocusTime">0/0 sessions</div>
+                                <div class="focus-stat-label">Today's Progress</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Focus Timer -->
+                <div class="focus-timer-section">
+                    <div class="focus-timer-card">
+                        <div class="timer-display">
+                            <div class="timer-circle">
+                                <svg class="timer-svg" viewBox="0 0 100 100">
+                                    <circle class="timer-track" cx="50" cy="50" r="45"></circle>
+                                    <circle class="timer-progress" cx="50" cy="50" r="45" id="timerProgress"></circle>
+                                </svg>
+                                <div class="timer-time" id="timerDisplay">25:00</div>
+                            </div>
+                        </div>
+                        <div class="timer-controls">
+                            <button class="timer-btn" id="startPauseBtn">
+                                <i class="fas fa-play"></i>
+                                <span>Start</span>
+                            </button>
+                            <button class="timer-btn secondary" id="resetBtn">
+                                <i class="fas fa-redo"></i>
+                                <span>Reset</span>
+                            </button>
+                        </div>
+                        <div class="timer-settings">
+                            <div class="timer-preset active" data-minutes="25">
+                                <span>25m</span>
+                                <small>Focus</small>
+                            </div>
+                            <div class="timer-preset" data-minutes="5">
+                                <span>5m</span>
+                                <small>Break</small>
+                            </div>
+                            <div class="timer-preset" data-minutes="15">
+                                <span>15m</span>
+                                <small>Long Break</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Focus Content -->
+                <div class="focus-content">
+                    <div class="focus-sections">
+                        <!-- Goals Section -->
+                        <div class="focus-section">
+                            <h2 class="section-title">
+                                <i class="fas fa-bullseye"></i>
+                                Goals
+                            </h2>
+                            <div class="goals-container" id="goalsContainer">
+                                <!-- Goals will be loaded here -->
+                            </div>
+                        </div>
+
+                        <!-- History Section -->
+                        <div class="focus-section">
+                            <h2 class="section-title">
+                                <i class="fas fa-history"></i>
+                                Session History
+                            </h2>
+                            <div class="history-container" id="historyContainer">
+                                <!-- History will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+    <noscript>
+        <div style="text-align: center; padding: 2rem; background: #f8f9fa; margin: 2rem; border-radius: 8px;">
+            <h2>JavaScript Required</h2>
+            <p>This application requires JavaScript to function properly. Please enable JavaScript in your browser.</p>
+        </div>
+    </noscript>
+</body>
+</html>
